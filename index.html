@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Breathe Peacefully</title>
+<style>
+:root{--bg:#eefbfd;--card:#fff;--ink:#07384d;--mut:#3d6c7e;--ac:#14bfe0;--on:#032a38;--ac2:#cdf1f7;--lk:#08708f;--wb:#fff4e0;--wi:#6b4200;--ln:#b3e3ec;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#06202c;--card:#0d3144;--ink:#e3f8fc;--mut:#9fcddb;--ac:#35d0ec;--on:#03232f;--ac2:#0f4658;--lk:#35d0ec;--wb:#3a2c10;--wi:#ffd98a;--ln:#1c5568}}
+:root[data-theme="dark"]{--bg:#06202c;--card:#0d3144;--ink:#e3f8fc;--mut:#9fcddb;--ac:#35d0ec;--on:#03232f;--ac2:#0f4658;--lk:#35d0ec;--wb:#3a2c10;--wi:#ffd98a;--ln:#1c5568}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);accent-color:var(--ac);font:17px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+main{max-width:520px;margin:0 auto;padding:16px}
+h1{font-size:26px;margin:8px 0 0;color:var(--lk)}h2{font-size:22px;margin:8px 0}
+.sub,.lbl{color:var(--mut);margin:2px 0 12px}
+button{font:inherit;color:inherit;cursor:pointer}
+.card{display:block;width:100%;text-align:left;background:var(--card);border:1px solid var(--ln);border-radius:16px;padding:16px;margin-bottom:12px;min-height:64px}
+.card b{display:block;font-size:19px;color:var(--lk)}.card span{color:var(--mut);font-size:15px}.hi{background:var(--ac2);border:1px solid var(--ln);border-radius:16px;padding:16px;margin-bottom:16px}.hi b{display:block;font-size:28px;line-height:1.2;color:var(--lk)}.hi span{display:block;margin-top:6px;font-size:22px;color:var(--lk)}
+.go,.btn{min-height:56px;border-radius:14px;border:0;font-weight:600;padding:0 22px}
+.go{width:100%;background:var(--ac);color:var(--on);font-size:19px;margin-top:16px}
+.btn{background:var(--ac2);border:1px solid var(--ln)}
+.chip{min-width:56px;min-height:48px;border-radius:24px;border:1px solid var(--ln);background:var(--card);margin-right:8px}
+.chip.sel{background:var(--ac);color:var(--on);border-color:var(--ac)}
+.link{background:none;border:0;color:var(--lk);padding:8px 0;font-weight:600}
+ol{padding-left:22px}li{margin-bottom:8px}
+.warn{background:var(--wb);color:var(--wi);border-radius:12px;padding:12px 14px;font-size:14px;margin-top:20px}
+#play{text-align:center}
+.orb{width:min(62vw,260px);aspect-ratio:1;margin:20px auto;border-radius:50%;background:var(--ac2);border:6px solid var(--ac);display:flex;align-items:center;justify-content:center;font-size:56px;font-weight:700;box-shadow:0 0 36px rgba(20,191,224,.35);transform:scale(.55)}
+.row{display:flex;gap:12px;justify-content:center;margin-top:12px}
+.sob{margin-top:16px;width:100%;background:var(--wb);color:var(--wi);border:1px solid var(--wi)}
+#cue{font-size:34px;margin:0}#dn,#pg{color:var(--lk)}.playing h1{display:none}.playing .hi{padding:10px 14px}.playing .hi b{font-size:20px}.playing .hi span{font-size:16px}#tx{min-height:52px;margin:6px 0}
+</style>
+</head>
+<body>
+<main>
+<h1>Breathe Peacefully</h1>
+<div class="hi"><b>Hey Anna Maria, Welcome!</b><span>You Look Great Today. You Got This! Let’s Start 😉👍</span></div>
+
+<section id="home"><div id="list"></div></section>
+
+<section id="detail" hidden>
+<button class="link" id="back">← Back</button>
+<h2 id="dn"></h2>
+<h3>How to do it</h3><div id="ds"></div>
+<div id="opt"></div>
+<p class="lbl"><label><input type="checkbox" id="snd" checked> Sound and vibration cues (helpful when walking)</label></p>
+<button class="go" id="start">Start</button>
+</section>
+
+<section id="play" hidden>
+<p class="lbl" id="pg"></p>
+<div class="orb" id="orb"><span id="num"></span></div>
+<h2 id="cue"></h2><p id="tx" aria-live="polite"></p><p class="lbl" id="rem"></p>
+<div class="row"><button class="btn" id="pp">Pause</button><button class="btn" id="stop">End</button></div>
+<button class="btn sob" id="sob" hidden>I’m short of breath</button>
+<div id="ask" hidden><p>Is your breathing easier?</p><div class="row"><button class="btn" id="yes">Yes, resume</button><button class="btn" id="no">No</button></div></div>
+</section>
+
+<p class="warn">This app supports, but doesn’t replace, your prescribed treatment. Keep your reliever inhaler with you. Stop and get urgent medical help if this exercise makes you feel worse, or if your reliever doesn’t help.</p>
+</main>
+<script>
+const IN="Breathe in through your nose",OUT="Breathe out slowly through pursed lips";
+const X=[
+{n:"Exercise 1: Diaphragmatic (“Belly”) Breathing",t:"Daily practice · 5–15 min",
+h:["Lie on your back (or recline with pillows) or sit upright. Place one hand on your abdomen, the other on your chest.","Inhale slowly through your nose for ~2–3 seconds, feeling your belly rise under your hand (the chest hand should move little). Aim to breathe deeply without lifting shoulders.","Exhale gently through your pursed lips (as if “blowing out a candle”) for 4–6 seconds. Feel your belly fall.","Repeat for 5–10 breaths. Practice this 10–15 minutes twice daily. Over weeks, you can transition to doing it while sitting or standing."],
+o:[5,10,15],g:m=>[{l:"Belly breathing",s:m*60,p:[["in",3,"Belly rises. "+IN],["out",5,"Belly falls. "+OUT]]}]},
+{n:"Exercise 2: Pursed-Lip Breathing (during activity)",t:"During activity · 5 breaths",
+h:["During exertion or early breathlessness, pause and breathe in through your nose for 2 seconds.","Exhale slowly through pursed lips for 4–6 seconds (exhalation longer than inhalation). Imagine “smelling a flower” then “blowing out a candle.”","Continue for 5 breaths. This slows ventilation and helps empty trapped air, relieving chest tightness."],
+g:()=>[{l:"Pursed-lip breathing",s:30,p:[["in",2,IN],["out",4,OUT]]}]},
+{n:"Exercise 3: Breathing Control/Relaxation (“Mini-Buteyko”)",t:"Rest or stress · 10 cycles",
+p:"Suggested for times of rest or stress. Sit comfortably and breathe quietly through the nose with minimal effort. After a normal exhalation, pause briefly (2–3 seconds) before the next inhalation, allowing a small increase in CO₂. This helps break the cycle of rapid breathing. Repeat 5–10 cycles. (Full Buteyko courses teach specific “Control Pause” timings; here use only gentle holds.)",
+g:()=>[{l:"Breathing control",s:100,p:[["in",3,"Breathe in quietly through your nose"],["out",4,"Breathe out gently"],["hold",3,"Pause gently. Don’t force it"]]}]},
+{n:"Exercise 4: Inspiratory Muscle Training (optional)",t:"Optional · needs a threshold device",
+p:"If a threshold IMT device is available (Powerbreathe, etc.), instruct to train 5–15 minutes twice daily at an intensity that elicits moderate resistance. A typical regimen is 30 breaths ×2 per day, gradually increasing resistance. This strengthens diaphragm and accessory muscles. Use pursed-lip exhalation as in exercise 2.",
+o:[5,10,15],g:m=>[{l:"Inspiratory muscle training",s:m*60,p:[["in",2,"Breathe in through the device"],["out",4,OUT]]}]},
+{n:"Warm-up/Cool-down Integration",t:"Guided walk · warm-up, walk, cool-down",walk:1,
+p:"Before walking, do 3–5 minutes of gentle warm-up (marching or slow walk) while practicing diaphragmatic breathing. After finishing, do 2–3 minutes of cool-down (slow pace, repeat diaphragmatic breaths).",
+o:[10,20,30],g:m=>{const b=[["in",3,"Walk slowly. Breathe in, belly rises"],["out",5,"Walk slowly. Breathe out, belly falls"]];return[{l:"Warm-up",s:300,p:b},{l:"Walking",s:m*60,p:[["in",2,"Breathe in through your nose"],["out",4,"Breathe out through pursed lips"]]},{l:"Cool-down",s:180,p:b}]}}
+];
+const $=i=>document.getElementById(i);
+let cur,mins,T=[],ix=0,el=0,on=false,last=0,raf,saved=null,wl=null,ac;
+const show=v=>{["home","detail","play"].forEach(x=>$(x).hidden=x!=v);document.body.classList.toggle("playing",v=="play")};
+const fmt=s=>{s=Math.ceil(s);return Math.floor(s/60)+":"+String(s%60).padStart(2,"0")};
+$("list").innerHTML=X.map((x,i)=>`<button class="card" data-i="${i}"><b>${x.n}</b><span>${x.t}</span></button>`).join("");
+$("list").onclick=e=>{const b=e.target.closest(".card");if(b)pick(+b.dataset.i)};
+function pick(i){cur=X[i];mins=cur.o?cur.o[0]:0;$("dn").textContent=cur.n;$("ds").innerHTML=cur.h?`<ol>${cur.h.map(s=>`<li>${s}</li>`).join("")}</ol>`:`<p>${cur.p}</p>`;
+$("opt").innerHTML=cur.o?`<p class="lbl">Minutes</p>`+cur.o.map((m,j)=>`<button class="chip${j?"":" sel"}" data-m="${m}">${m}</button>`).join(""):"";
+show("detail")}
+$("opt").onclick=e=>{const b=e.target.closest(".chip");if(!b)return;mins=+b.dataset.m;document.querySelectorAll(".chip").forEach(c=>c.classList.toggle("sel",c===b))};
+$("back").onclick=()=>show("home");
+function build(g){T=[];g.forEach(s=>{let t=0;while(t<s.s)for(const p of s.p){T.push({g:s.l,k:p[0],s:p[1],x:p[2]});t+=p[1];if(t>=s.s)break}})}
+function beep(k){if(!$("snd").checked||k=="hold")return;try{ac=ac||new AudioContext();const o=ac.createOscillator(),g=ac.createGain();o.frequency.value=k=="in"?660:440;g.gain.value=.08;o.connect(g);g.connect(ac.destination);o.start();o.stop(ac.currentTime+.12);if(navigator.vibrate)navigator.vibrate(50)}catch(e){}}
+function loop(){cancelAnimationFrame(raf);last=performance.now();raf=requestAnimationFrame(tick)}
+async function wake(){try{wl=await navigator.wakeLock.request("screen")}catch(e){}}
+function rel(){try{if(wl)wl.release()}catch(e){}wl=null}
+$("start").onclick=()=>{build(cur.g(mins));ix=0;el=0;saved=null;$("ask").hidden=true;$("pp").hidden=false;$("pp").textContent="Pause";$("sob").hidden=!cur.walk;$("rem").hidden=false;show("play");on=true;wake();beep(T[0].k);loop()};
+function tick(n){if(!on)return;el+=Math.min((n-last)/1e3,.5);last=n;let c=T[ix];
+while(el>=c.s){el-=c.s;ix++;if(ix>=T.length)return fin();c=T[ix];beep(c.k)}
+const f=el/c.s;$("orb").style.transform=`scale(${c.k=="in"?.55+.45*f:c.k=="out"?1-.45*f:.55})`;
+$("num").textContent=Math.ceil(c.s-el);$("cue").textContent={in:"Breathe In",out:"Breathe Out",hold:"Pause"}[c.k];$("tx").textContent=c.x;$("pg").textContent=c.g;
+$("rem").textContent=fmt(T.slice(ix).reduce((a,t)=>a+t.s,0)-el)+" left";raf=requestAnimationFrame(tick)}
+function msg(c,t){$("cue").textContent=c;$("tx").textContent=t;$("num").textContent="✓";$("orb").style.transform="scale(1)";$("rem").hidden=true;$("pp").hidden=true;$("sob").hidden=true}
+function fin(){on=false;if(saved){msg("Better?","");$("num").textContent="";$("ask").hidden=false;return}rel();msg("Done","Well done. Rest, and sip some water if you like.")}
+$("pp").onclick=()=>{on=!on;$("pp").textContent=on?"Pause":"Resume";if(on)loop()};
+$("stop").onclick=()=>{on=false;saved=null;rel();cancelAnimationFrame(raf);show("home")};
+$("sob").onclick=()=>{saved={T,ix,el};build([{l:"Short of breath: stop and breathe",s:30,p:[["in",2,IN],["out",4,OUT]]}]);ix=0;el=0;$("sob").hidden=true;$("pp").textContent="Pause";on=true;loop()};
+$("yes").onclick=()=>{({T,ix,el}=saved);saved=null;$("ask").hidden=true;$("pp").hidden=false;$("rem").hidden=false;$("sob").hidden=false;on=true;loop()};
+$("no").onclick=()=>{saved=null;rel();$("ask").hidden=true;msg("Rest","Sit down and use your reliever inhaler as prescribed. If it doesn’t ease, or you have chest pain, blue lips or can’t speak in full sentences, get urgent medical help.")};
+</script>
+</body>
+</html>
