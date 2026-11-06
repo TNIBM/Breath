@@ -2,7 +2,7 @@
 
 Guided breathing practice for adults with asthma: step-by-step instructions, an animated breathing pacer and a timer, in one simple web page.
 
-**Live app:** https://YOUR-USERNAME.github.io/YOUR-REPOSITORY/
+**Live app:** [https://tnibm.github.io/Breath/]
 
 > **Not medical advice.** This app supports, but doesn't replace, prescribed treatment. Keep your reliever inhaler with you. If you ever feel unwell, pause and use your reliever as prescribed. If it doesn't help, get medical help right away. Don't change or reduce your medication because of breathing exercises without talking to your doctor first.
 
